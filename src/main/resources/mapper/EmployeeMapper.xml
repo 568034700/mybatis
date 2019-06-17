@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.EmployeeMapper">
+    <insert id="addEmp">
+        insert into tbl_employee(ID,LAST_NAME,EMAIL,GENDER)
+		values(#{id},#{lastName},#{email},#{gender})
+    </insert>
+    <!-- parameterType：参数类型，可以省略，
+	获取自增主键的值：
+		mysql支持自增主键，自增主键值的获取，mybatis也是利用statement.getGenreatedKeys()；
+		useGeneratedKeys="true"；使用自增主键获取主键值策略
+		keyProperty；指定对应的主键属性，也就是mybatis获取到主键值以后，将这个值封装给javaBean的哪个属性
+		注意：自己测试了设置了主键自增以后，你javaBean里面即使id有值，也不会去这个值
+	-->
+    <insert id="addEmpAuto" useGeneratedKeys="true" keyProperty="id" databaseId="mysql">
+        insert into tbl_employee(LAST_NAME,EMAIL,GENDER)
+		values(#{lastName},#{email},#{gender})
+    </insert>
+    <update id="updateEmp">
+        update tbl_employee
+        set last_name=#{lastName},email=#{email},gender=#{gender}
+        where id = #{id}
+    </update>
+    <delete id="deleteEmpById">
+        delete from tbl_employee where id=#{id}
+    </delete>
+    <!--
+    namespace:名称空间;指定为接口的全类名
+    id：唯一标识
+    resultType：返回值类型
+    #{id}：从传递过来的参数中取出id值
+
+    public Employee getEmpById(Integer id);
+     -->
+    <select id="getEmpById" resultType="bean.Employee" databaseId="mysql">
+    select * from tbl_employee where id = #{id}
+  </select>
+</mapper>
