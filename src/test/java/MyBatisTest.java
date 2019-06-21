@@ -9,6 +9,10 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Description
@@ -73,7 +77,7 @@ public class MyBatisTest {
     }
 
     @Test
-    public void test02() throws IOException{
+    public void test02() throws IOException {
         SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
         SqlSession openSession = sqlSessionFactory.openSession();
         try {
@@ -89,19 +93,20 @@ public class MyBatisTest {
     /**
      * 测试增删改
      * 1、mybatis允许增删改直接定义以下类型返回值
-     * 		Integer、Long、Boolean、void
+     * Integer、Long、Boolean、void
      * 2、我们需要手动提交数据
-     * 		sqlSessionFactory.openSession();===》手动提交
-     * 		sqlSessionFactory.openSession(true);===》自动提交
+     * sqlSessionFactory.openSession();===》手动提交
+     * sqlSessionFactory.openSession(true);===》自动提交
+     *
      * @throws IOException
      */
     @Test
-    public void test03() throws IOException{
+    public void test03() throws IOException {
         SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
 //        1、获取到的SqlSession不会自动提交数据
         SqlSession openSession = sqlSessionFactory.openSession();
-        Employee employee = new Employee(3,"jerry","123@qq.com","2");
-        Employee employee1 = new Employee(100,"jerry","123@qq.com","2");
+        Employee employee = new Employee(3, "jerry", "123@qq.com", "2");
+        Employee employee1 = new Employee(100, "jerry", "123@qq.com", "2");
 
 
         try {
@@ -124,4 +129,182 @@ public class MyBatisTest {
 
 
     }
+
+
+    @Test
+    public void test04() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+//        1、获取到的SqlSession不会自动提交数据
+        SqlSession openSession = sqlSessionFactory.openSession();
+
+
+        try {
+            EmployeeMapper mapper = openSession.getMapper(EmployeeMapper.class);
+            Employee employee = mapper.getEmpByIdAndLastName((1), "tom");
+            System.out.println(employee);
+            openSession.commit();
+        } finally {
+            openSession.close();
+        }
+
+
+    }
+
+    @Test
+    public void test05() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+//        1、获取到的SqlSession不会自动提交数据
+        SqlSession openSession = sqlSessionFactory.openSession();
+
+
+        try {
+            EmployeeMapper mapper = openSession.getMapper(EmployeeMapper.class);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", 1);
+            map.put("lastName", "tom");
+            map.put("tableName", "tbl_employee");
+            Employee employee = mapper.getEmpByMap(map);
+            System.out.println(employee);
+            openSession.commit();
+        } finally {
+            openSession.close();
+        }
+
+
+    }
+
+    @Test
+    public void test07() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+//        1、获取到的SqlSession不会自动提交数据
+        SqlSession openSession = sqlSessionFactory.openSession();
+
+
+        try {
+            EmployeeMapper mapper = openSession.getMapper(EmployeeMapper.class);
+            List<Integer> list11 = new ArrayList<Integer>();
+            list11.add(1);
+            Employee employee = mapper.getEmpByList(list11);
+            System.out.println(employee);
+            openSession.commit();
+        } finally {
+            openSession.close();
+        }
+
+
+    }
+
+    @Test
+    public void test08() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+//        1、获取到的SqlSession不会自动提交数据
+        SqlSession openSession = sqlSessionFactory.openSession();
+
+
+        try {
+            EmployeeMapper mapper = openSession.getMapper(EmployeeMapper.class);
+            List<Integer> list11 = new ArrayList<Integer>();
+            list11.add(1);
+            Employee employee = mapper.getEmpByList(list11);
+            System.out.println(employee);
+            openSession.commit();
+        } finally {
+            openSession.close();
+        }
+
+
+    }
+
+    @Test
+    public void test09() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+//        1、获取到的SqlSession不会自动提交数据
+        SqlSession openSession = sqlSessionFactory.openSession();
+
+
+        try {
+            EmployeeMapper mapper = openSession.getMapper(EmployeeMapper.class);
+            List<Integer> list11 = new ArrayList<Integer>();
+            list11.add(1);
+            List<String> list22 = new ArrayList<String>();
+            list22.add("tom");
+            Employee employee = mapper.getEmpByListParam2(list11, list22);
+            System.out.println(employee);
+            openSession.commit();
+        } finally {
+            openSession.close();
+        }
+    }
+
+    @Test
+    public void test10() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+//        1、获取到的SqlSession不会自动提交数据
+        SqlSession openSession = sqlSessionFactory.openSession();
+
+
+        try {
+            EmployeeMapper mapper = openSession.getMapper(EmployeeMapper.class);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", 1);
+            Map<String, Object> map2 = new HashMap<String, Object>();
+            map2.put("lastName", "tom");
+            List<String> list22 = new ArrayList<String>();
+            list22.add("tom");
+            Employee employee = mapper.getEmpByMap2(map, map2);
+            System.out.println(employee);
+            openSession.commit();
+        } finally {
+            openSession.close();
+        }
+    }
+
+    @Test
+    public void test11() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+        SqlSession openSession = sqlSessionFactory.openSession();
+
+        try {
+            EmployeeMapper mapper = openSession.getMapper(EmployeeMapper.class);
+            List<Employee> like = mapper.getEmpsByLastNameLike("j");
+            for (Employee e : like) {
+                System.out.println(e);
+            }
+            openSession.commit();
+        } finally {
+            openSession.close();
+        }
+
+    }
+
+    @Test
+    public void test12() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+        SqlSession openSession = sqlSessionFactory.openSession();
+
+        try {
+            EmployeeMapper mapper = openSession.getMapper(EmployeeMapper.class);
+            Map<String, Object> map = mapper.getEmpByIdReturnMap(1);
+            System.out.println(map);
+        } finally {
+            openSession.close();
+        }
+
+    }
+
+    @Test
+    public void test13() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+        SqlSession openSession = sqlSessionFactory.openSession();
+
+        try {
+            EmployeeMapper mapper = openSession.getMapper(EmployeeMapper.class);
+            Map<String, Employee> map = mapper.getEmpByLastNameLikeReturnMap("j");
+            System.out.println(map);
+        } finally {
+            openSession.close();
+        }
+
+    }
+
 }
